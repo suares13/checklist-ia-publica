@@ -1,38 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Auditoria Ética em IA Pública</title>
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-.wrap { padding: 1rem 0; }
-.dim { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 1rem; overflow: hidden; }
-.dim-header { padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-.badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 999px; }
-.dim-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
-.question { display: flex; align-items: flex-start; gap: 12px; padding: 10px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-.question:last-child { border-bottom: none; }
-.q-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; flex: 1; }
-.options { display: flex; gap: 6px; flex-shrink: 0; }
-.opt { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-secondary); cursor: pointer; transition: all 0.15s; }
-.opt:hover { background: var(--color-background-tertiary); }
-.opt.sim.active { background: #EAF3DE; color: #27500A; border-color: #97C459; }
-.opt.parc.active { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
-.opt.nao.active { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
-.score-bar { padding: 14px 16px; background: var(--color-background-secondary); display: flex; align-items: center; gap: 16px; }
-.score-label { font-size: 13px; color: var(--color-text-secondary); }
-.score-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); min-width: 60px; }
-.bar-track { flex: 1; height: 6px; background: var(--color-border-tertiary); border-radius: 999px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s; }
-.status { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px; }
-</style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+
+    .wrap { 
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem; 
+    }
+
+    .source-banner {
+      font-size: 13px;
+      color: var(--text-muted);
+      background: #ffffff;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      line-height: 1.4;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .source-banner strong {
+      color: #0c447c;
+    }
+
+    .score-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .score-bar { 
+      display: flex; 
+      flex-direction: column;
+      gap: 12px; 
+    }
+
+    .score-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .score-label { 
+      font-size: 15px; 
+      font-weight: 600;
+      color: var(--text-main); 
+    }
+
+    .score-val { 
+      font-size: 24px; 
+      font-weight: 700; 
+      color: #0f172a; 
+    }
+
+    .bar-track { 
+      width: 100%; 
+      height: 10px; 
+      background: #f1f5f9; 
+      border-radius: 999px; 
+      overflow: hidden; 
+    }
+
+    .bar-fill { 
+      height: 100%; 
+      border-radius: 999px; 
+      transition: width 0.4s ease, background-color 0.3s ease; 
+    }
+
+    .status { 
+      font-size: 13px; 
+      font-weight: 600; 
+      padding: 6px 14px; 
+      border-radius: 999px; 
+      text-align: center;
+      align-self: flex-start;
+      transition: all 0.3s;
+    }
+
+    .dim { 
+      background: var(--card-bg); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--radius-lg); 
+      margin-bottom: 1.5rem; 
+      overflow: hidden; 
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .dim-header { 
+      padding: 18px 20px; 
+      background: #fafafa;
+      border-bottom: 1px solid var(--border-color); 
+    }
+
+    .badge { 
+      font-size: 12px; 
+      font-weight: 700; 
+      padding: 4px 10px; 
+      border-radius: 6px; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .dim-desc { 
+      font-size: 14px; 
+      color: var(--text-muted); 
+      line-height: 1.4;
+    }
+
+    .question { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 14px; 
+      padding: 20px; 
+      border-bottom: 1px solid var(--border-color); 
+    }
+
+    .question:last-child { 
+      border-bottom: none; 
+    }
+
+    .q-text { 
+      font-size: 15px; 
+      color: var(--text-main); 
+      line-height: 1.5; 
+      font-weight: 500;
+    }
+
+    .options { 
+      display: flex; 
+      gap: 8px; 
+    }
+
+    .opt { 
+      flex: 1;
+      font-size: 14px; 
+      font-weight: 600;
+      padding: 10px 16px; 
+      border-radius: var(--radius-md); 
+      border: 1.5px solid var(--border-color); 
+      color: var(--text-muted); 
+      background: #ffffff; 
+      cursor: pointer; 
+      transition: all 0.2s ease; 
+      text-align: center;
+    }
+
+    .opt:hover { 
+      background: #f8fafc; 
+      border-color: #cbd5e1;
+      color: var(--text-main);
+    }
+
+    .opt.sim.active { 
+      background: #ecfdf5; 
+      color: #065f46; 
+      border-color: #10b981; 
+      box-shadow: 0 2px 4px rgba(16,185,129,0.1);
+    }
+    
+    .opt.parc.active { 
+      background: #fffbeb; 
+      color: #92400e; 
+      border-color: #f59e0b; 
+      box-shadow: 0 2px 4px rgba(245,158,11,0.1);
+    }
+    
+    .opt.nao.active { 
+      background: #fef2f2; 
+      color: #991b1b; 
+      border-color: #ef4444; 
+      box-shadow: 0 2px 4px rgba(239,68,68,0.1);
+    }
+
+    @media (max-width: 480px) {
+      .options {
+        flex-direction: column;
+      }
+      .opt {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
 <div class="wrap">
-<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;">Dimensões baseadas na Recomendação sobre a Ética da Inteligência Artificial (UNESCO, 2021)</div>
-<div id="dims"></div>
-<div class="dim">
-  <div class="score-bar">
-    <span class="score-label">Pontuação geral</span>
-    <span class="score-val" id="score-val">0/100</span>
-    <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
-    <span class="status" id="status-badge" style="background:#F1EFE8;color:#444441">—</span>
+  <div class="source-banner">
+    Dimensões e critérios baseados na <strong>Recomendação sobre a Ética da Inteligência Artificial (UNESCO, 2021)</strong>. Use este guia para avaliar o serviço público digital que você utilizou.
   </div>
-</div>
+
+  <div class="score-card">
+    <div class="score-bar">
+      <div class="score-header">
+        <span class="score-label">Grau de Conformidade Ética</span>
+        <span class="score-val" id="score-val">0/100</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+      <span class="status" id="status-badge" style="background:#f1f5f9;color:#64748b">Responda as perguntas para calcular</span>
+    </div>
+  </div>
+
+  <div id="dims"></div>
 </div>
 
 <script>
@@ -67,7 +267,7 @@ const dims = [
     questions: [
       "O sistema opera com a mesma velocidade e eficiência para usuários de diferentes regiões e municípios?",
       "O serviço oferece opções de análise que não dependam de históricos ou documentos complexos que trabalhadores informais ou de baixa renda têm dificuldade de obter?",
-      "Existe um canal ou formulário visível para denunciar ou relatar suspeitas de tratamento injusto e preconceituoso pelo algoritmo?"
+      "Existe um canal ou formulário visível para indicar suspeitas de tratamento injusto e preconceituoso pelo algoritmo?"
     ]
   },
   {
@@ -142,15 +342,16 @@ function updateScore() {
   const pct = max > 0 ? Math.round((total / max) * 100) : 0;
   document.getElementById("score-val").textContent = pct + "/100";
   document.getElementById("bar").style.width = pct + "%";
-  document.getElementById("bar").style.background = pct >= 70 ? "#639922" : pct >= 40 ? "#EF9F27" : "#E24B4A";
-  let label = "—", bg = "#F1EFE8", tc = "#444441";
+  document.getElementById("bar").style.background = pct >= 70 ? "#10b981" : pct >= 40 ? "#f59e0b" : "#ef4444";
+  
+  let label = "—", bg = "#f1f5f9", tc = "#64748b";
   if (answered.length === keys.length) {
-    if (pct >= 70) { label = "Aprovado"; bg = "#EAF3DE"; tc = "#27500A"; }
-    else if (pct >= 40) { label = "Alerta"; bg = "#FAEEDA"; tc = "#633806"; }
-    else { label = "Falha ética"; bg = "#FCEBEB"; tc = "#791F1F"; }
+    if (pct >= 70) { label = "Aprovado: O sistema cumpre as diretrizes éticas."; bg = "#d1fae5"; tc = "#065f46"; }
+    else if (pct >= 40) { label = "Alerta: O sistema apresenta riscos éticos moderados."; bg = "#fef3c7"; tc = "#92400e"; }
+    else { label = "Falha Ética Crítica: O sistema desrespeita direitos básicos."; bg = "#fee2e2"; tc = "#991b1b"; }
   } else if (answered.length > 0) {
-    label = answered.length + "/" + keys.length + " respondidas";
-    bg = "#F1EFE8"; tc = "#444441";
+    label = "Respondido: " + answered.length + " de " + keys.length + " perguntas.";
+    bg = "#f1f5f9"; tc = "#444441";
   }
   const badge = document.getElementById("status-badge");
   badge.textContent = label;
@@ -160,3 +361,5 @@ function updateScore() {
 
 render();
 </script>
+</body>
+</html>
